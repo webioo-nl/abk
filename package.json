@@ -1,0 +1,11 @@
+{
+  "name": "abk",
+  "private": true,
+  "description": "Scripts voor adverterenbovenkassas.tv (Webioo Digital Agency)",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}

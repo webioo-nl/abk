@@ -25,16 +25,29 @@ In deze repo staat alleen de formule en het gedrag van de pagina.
 
 Volgorde is belangrijk: eerst `tarief.js`, dan `calculator.js`, dan de instellingen per pagina.
 
+In "Before </body> tag" van de pagina, zonder `async` of `defer`:
+
 ```html
 <script src="https://cdn.jsdelivr.net/gh/webioo-nl/abk@vX.Y.Z/src/tarief.js" integrity="sha384-…" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/gh/webioo-nl/abk@vX.Y.Z/src/calculator.js" integrity="sha384-…" crossorigin="anonymous"></script>
-<script>ABK.initCalculator({ regioUitUrl: true, minimaalEenWinkel: true, finsweetLijst: false });</script>
+<script>ABK.initCalculator({ minimaalEenWinkel: true });</script>
 ```
 
-| Pagina | Instellingen |
+| Pagina | Aanroep |
 |---|---|
-| /landelijk-adverteren | nog in te vullen |
-| Locaties Template (/locatie/…) | nog in te vullen |
+| /landelijk-adverteren | `ABK.initCalculator({ minimaalEenWinkel: true });` |
+| Locaties Template (/locatie/…) | `ABK.initCalculator({ minimaalEenWinkel: false, standaardRegio: '<CMS-veld regio>' });` |
+
+Opties:
+
+| Optie | Standaard | Wat |
+|---|---|---|
+| `minimaalEenWinkel` | `false` | Minstens één winkel moet aangevinkt blijven (met melding). |
+| `standaardRegio` | `''` | Regio die vooraf wordt aangevinkt als er geen `?regio=` in de URL staat. Op de Locaties Template via "+ Add field" het CMS-veld van de regio invullen. Let op: een `'` in de regionaam breekt de aanroep. |
+
+Een `?regio=…` in de URL vinkt altijd die regio aan (hoofdletters maken niet uit) en gaat voor op `standaardRegio`.
+
+De oude calculatorcode in "Inside <head> tag" (getUrlParam, cmsRegio, updateFilters) en in "Before </body> tag" moet weg als deze scripts erin staan. Finsweet, de `og:url`-meta en de `<style>` blijven staan.
 
 Hash ophalen (Terminal):
 
@@ -48,7 +61,23 @@ Het script verwacht deze elementen op de pagina. Hernoem of verwijder ze niet zo
 
 | Element | ID / name / attribuut | Gebruikt voor |
 |---|---|---|
-| _nog in te vullen bij de eerste versie_ | | |
+| Startbedrag | `#startbedrag` met `data-value` | vast bedrag in de formule |
+| Winkel | `input.winkel` met `data-opslag`, `data-name`, `data-shortname` | opslag, formulierveld, samenvatting |
+| Winkel-wrapper | element met `data-locatie` (regionaam) rond elke winkel | regiofilter |
+| Winkellijst | `[fs-list-element="list"]` (optioneel) | opnieuw rekenen als Finsweet winkels toevoegt |
+| Regiofilter | `.filter-checkbox` met daarin `input[type=checkbox][data-filter]` | filter en markering |
+| Filters wissen | `[filter-element="clear"]` (optioneel) | alle filters uit |
+| Alle winkels | `#toggleWinkels` | (de)selecteren |
+| Tip | `#winkeltip` (optioneel) | tonen bij meer dan één winkel |
+| Keuzes | radio's met `name` = `frequentie`, `contractperiode`, `lengte`, `betaalmethode`, `opmaak`, elk met `data-value` (factor) en `value` (tekst) | formule en samenvatting; `value` met "jaar" of "week" bepaalt p.j./p.w. |
+| Stappen | `.stap` met `id` `stap1` t/m `stap7` | stap tonen |
+| Voortgang | `.form-step` met `data-step`, `.form-step-line .form-step-progress`, `#stepIndicator` | voortgangsbalk |
+| Knoppen | `.vorige-btn`, `.volgende-btn` | navigeren |
+| Tarief | `#bedrag`, `#perMonth` (optioneel) | weergave |
+| Verborgen velden | `#tarief` (optioneel), `#winkelData` | gaan mee met de aanvraag |
+| Samenvatting | `#samenvatting-locaties`, `#samenvatting-frequentie`, `-contractperiode`, `-lengte`, `-betaalmethode`, `-opmaak` | overzicht |
+| Startdatum | `select#startdatum`, `#showDate` | eigen datum bij 4e/5e optie |
+| Contactgegevens | `#voornaam`, `#achternaam`, `#e-mail`, `#telefoonnummer`, `#bedrijfswebsite`, `#website-error` | validatie |
 
 ## Versies
 
@@ -71,8 +100,8 @@ Het script verwacht deze elementen op de pagina. Hernoem of verwijder ze niet zo
 ## Testen
 
 ```bash
-node tests/tarief.test.js
-node tests/calculator.test.js
+npm install   # eenmalig, installeert jsdom voor de paginatests
+npm test
 ```
 
 Daarna op de webflow.io-versie testen voordat er live gepubliceerd wordt.
