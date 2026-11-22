@@ -17,7 +17,7 @@ Per versie: wat er veranderd is, op welke pagina's, wanneer live, en de hashes.
 - calculator.js: sha384-…
 -->
 
-## v1.0.0 – nog niet live
+## v1.0.0 – 2026-11-22
 
 **Wat:**
 - De twee calculators (Landelijk Adverteren en Locaties Template) samengevoegd tot `tarief.js` en `calculator.js`, met instellingen per pagina via `ABK.initCalculator`.
@@ -29,6 +29,8 @@ Per versie: wat er veranderd is, op welke pagina's, wanneer live, en de hashes.
 
 **Pagina's:** /landelijk-adverteren, Locaties Template
 
-**Live sinds:** –
+**Live sinds:** 2026-11-22
 
-**Hashes:** –
+**Hashes:**
+- tarief.js: `sha384-oY55OeWMiheyx5ZmfkdGgpaBcbyJ7fcP6bDA5lM4NZDOvQexSWj+9K8ARJ/bPhk1`
+- calculator.js: `sha384-A64Vw3dC3b83ci5BAYc0zefLa4wRXnNTIv2Wml21dSer2NW44JB16IRQ9C+Vxrcm`
